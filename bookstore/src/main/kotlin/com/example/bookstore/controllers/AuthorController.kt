@@ -1,18 +1,14 @@
 package com.example.bookstore.controllers
 
-import com.example.bookstore.payload.dto.AuthorDto
+import com.example.bookstore.payload.dto.author.AuthorDto
+import com.example.bookstore.payload.dto.author.AuthorUpdateRequestDto
 import com.example.bookstore.payload.extensions.toAuthor
 import com.example.bookstore.payload.extensions.toAuthorDto
+import com.example.bookstore.payload.extensions.toAuthorUpdateRequest
 import com.example.bookstore.services.AuthorService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.PutMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping(path = ["/v1/authors"])
@@ -46,13 +42,33 @@ class AuthorController(
     @PutMapping("/{id}")
     fun fullUpdate(
         @PathVariable(name = "id") id: Long,
-        @RequestBody authorDto: AuthorDto) : ResponseEntity<AuthorDto>{
+        @RequestBody authorDto: AuthorDto
+    ) : ResponseEntity<AuthorDto>{
         try {
             val updatedEntity = authorService.fullUpdate(id, authorDto.toAuthor())
             return ResponseEntity(updatedEntity.toAuthorDto(), HttpStatus.OK)
-        } catch (e: IllegalArgumentException){
+        } catch (e: IllegalStateException){
             return ResponseEntity(HttpStatus.BAD_REQUEST)
         }
     }
 
+    @PatchMapping("/{id}")
+    fun partialUpdate(
+        @PathVariable(name = "id") id: Long,
+        @RequestBody authorUpdateDto: AuthorUpdateRequestDto
+    ) : ResponseEntity<AuthorDto>
+    {
+        return try {
+            val updatedEntity = authorService.partialUpdate(id, authorUpdateDto.toAuthorUpdateRequest())
+             ResponseEntity(updatedEntity.toAuthorDto(), HttpStatus.OK)
+        } catch (e: IllegalStateException){
+             ResponseEntity(HttpStatus.BAD_REQUEST)
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    fun deleteAuthor(@PathVariable(name = "id") id: Long): ResponseEntity<Unit>{
+        authorService.delete(id)
+        return ResponseEntity(HttpStatus.NO_CONTENT)
+    }
 }

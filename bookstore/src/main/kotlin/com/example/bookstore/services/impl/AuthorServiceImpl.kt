@@ -1,6 +1,7 @@
 package com.example.bookstore.services.impl
 
 import com.example.bookstore.entities.Author
+import com.example.bookstore.payload.request.AuthorUpdateRequest
 import com.example.bookstore.repositories.AuthorRepository
 import com.example.bookstore.services.AuthorService
 import jakarta.transaction.Transactional
@@ -31,6 +32,23 @@ class AuthorServiceImpl(
         return authorRepository.save(normalizedAuthor)
     }
 
+    @Transactional
+    override fun partialUpdate(id: Long, authorUpdate: AuthorUpdateRequest): Author {
+        val exisingAuthor = authorRepository.findByIdOrNull(id)
+        checkNotNull(exisingAuthor)
+        val updatedAuthor = exisingAuthor.copy(
+            name = authorUpdate.name ?:  exisingAuthor.name,
+            age = authorUpdate.age ?: exisingAuthor.age,
+            description = authorUpdate.description ?: exisingAuthor.description,
+            image = authorUpdate.image ?: exisingAuthor.image
+        )
+
+        return authorRepository.save(updatedAuthor)
+    }
+
+    override fun delete(id: Long) {
+        authorRepository.deleteById(id)
+    }
 
 
 }
