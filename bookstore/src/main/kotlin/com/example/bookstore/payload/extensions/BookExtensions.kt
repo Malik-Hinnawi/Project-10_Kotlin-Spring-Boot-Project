@@ -3,6 +3,8 @@ package com.example.bookstore.payload.extensions
 import com.example.bookstore.entities.Author
 import com.example.bookstore.entities.Book
 import com.example.bookstore.payload.dto.book.BookSummaryDto
+import com.example.bookstore.payload.dto.book.BookUpdateRequestDto
+import com.example.bookstore.payload.request.BookUpdateRequest
 import com.example.bookstore.payload.summary.BookSummary
 
 
@@ -28,4 +30,10 @@ fun Book.toBookSummaryDto() = BookSummaryDto(
     title = this.title,
     description = this.description,
     author = this.author.toAuthorSummaryDto()
+)
+
+fun BookUpdateRequestDto.toBookUpdateRequest() = BookUpdateRequest(
+    image = this.image,
+    title = this.title,
+    description = this.description
 )

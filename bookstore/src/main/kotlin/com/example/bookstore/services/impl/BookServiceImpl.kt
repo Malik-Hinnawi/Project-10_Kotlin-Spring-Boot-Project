@@ -2,6 +2,7 @@ package com.example.bookstore.services.impl
 
 import com.example.bookstore.entities.Book
 import com.example.bookstore.payload.extensions.toBookEntity
+import com.example.bookstore.payload.request.BookUpdateRequest
 import com.example.bookstore.payload.summary.BookSummary
 import com.example.bookstore.repositories.AuthorRepository
 import com.example.bookstore.repositories.BookRepository
@@ -27,5 +28,32 @@ class BookServiceImpl(
 
         val savedBook = bookRepository.save(normalizedBook.toBookEntity(author))
         return Pair(savedBook, !isExists)
+    }
+
+    override fun list(authorId: Long?): List<Book> {
+        return authorId?.let {
+            bookRepository.findByAuthorId(it)
+        } ?: bookRepository.findAll()
+    }
+
+    override fun get(isbn: String): Book? {
+        return bookRepository.findByIdOrNull(isbn)
+    }
+
+    override fun partialUpdate(isbn: String, bookUpdateRequest: BookUpdateRequest): Book {
+        val existingBook = bookRepository.findByIdOrNull(isbn)
+        checkNotNull(existingBook)
+
+        val updatedBook = existingBook.copy(
+            title = bookUpdateRequest.title ?: existingBook.title,
+            description =  bookUpdateRequest.description ?: existingBook.description,
+            image =  bookUpdateRequest.image ?: existingBook.image
+        )
+
+        return bookRepository.save(updatedBook)
+    }
+
+    override fun delete(isbn: String) {
+       bookRepository.deleteById(isbn)
     }
 }

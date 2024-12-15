@@ -12,6 +12,6 @@ CREATE TABLE `books` (
     `isbn` VARCHAR(19) PRIMARY KEY NOT NULL,
     `description` VARCHAR(2048),
     `title` VARCHAR(512),
-    `author_id` bigint,
+    `author_id` bigint NOT NULL REFERENCES `authors` (`id`),
     `image` VARCHAR(512)
 );
