@@ -97,6 +97,4 @@ The frontend communicates with the backend through RESTful API endpoints. It use
 
 This project is inspired by [devtiro/course-kotlin-spring-boot](https://github.com/devtiro/course-kotlin-spring-boot) but has been tailored for Kotlin Spring Boot 3.4, MySQL, and React.
 
----
-**Malik Nizar Asad Al Hinnawi**.
 
