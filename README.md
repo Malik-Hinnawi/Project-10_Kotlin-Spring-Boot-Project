@@ -15,7 +15,7 @@ This repository contains both the backend and frontend for the **BookStore** pro
 
 - Docker and Docker Compose installed.
 - Node.js and npm installed (for frontend).
-- Java Development Kit (JDK 17 or higher).
+- Java Development Kit (JDK 21 or higher).
 - Maven installed (for backend).
 
 ## Running the Project
